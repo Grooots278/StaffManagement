@@ -1,0 +1,72 @@
+## Исключаем артефакты сборки .NET
+bin/
+obj/
+
+## Visual Studio / Rider
+.vs/
+.vscode/
+*.sln.DotSettings.user
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+## NuGet
+packages/
+*.nupkg
+
+## Локальные файлы конфигурации
+appsettings.Development.json
+appsettings.Local.json
+local.settings.json
+
+## Логи и временные файлы
+*.log
+*.tmp
+*.swp
+*.swo
+*.swn
+
+## macOS
+.DS_Store
+
+## Windows
+Thumbs.db
+Desktop.ini
+
+## Архивы
+*.zip
+*.tar.gz
+*.7z
+
+## Файлы баз данных
+*.db
+*.sqlite
+*.mdf
+*.ldf
+
+## Результаты тестирования
+TestResults/
+*.testsettings
+*.trx
+
+## Docker
+.dockerignore
+
+## Другие IDE
+.idea/
+*.swm
+*.swf
+
+## Пользовательские настройки и секреты (никогда не коммитить!)
+*.env
+*.env.local
+*.env.development.local
+*.env.test.local
+*.env.production.local
+secrets.json
