@@ -1,15 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using StaffManagement.Application.Common.Interfaces;
 using StaffManagement.Domain.Entities;
 
 namespace StaffManagement.Infrastructure.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : DbContext, IApplicationDbContext
     {
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        public DbSet<Department> Departments { get; set; }
-        public DbSet<Position> Positions { get; set; }
+        public DbSet<Department> Departments => Set<Department>();
+        public DbSet<Position> Positions => Set<Position>();
+
+        public Task<int> SaveChangeAsync(CancellationToken cancellationToken)
+        {
+            return base.SaveChangesAsync(cancellationToken);
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
