@@ -6,4 +6,18 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Positions\Commands\" />
+    <Folder Include="Positions\DTOs\" />
+    <Folder Include="Positions\Queries\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StaffManagement.Domain\StaffManagement.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
