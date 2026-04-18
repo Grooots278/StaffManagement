@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using StaffManagement.Application.Common.Interfaces;
 using StaffManagement.Application.Departments.Commands;
 using StaffManagement.Application.Departments.Queries;
+using StaffManagement.Application.Positions.Commands;
+using StaffManagement.Application.Positions.Queries;
 using StaffManagement.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +23,11 @@ builder.Services.AddScoped<UpdateDepartmentCommandHandler>();
 builder.Services.AddScoped<DeleteDepartmentCommandHandler>();
 builder.Services.AddScoped<GetDepartmentByIdQueryHandler>();
 builder.Services.AddScoped<GetDepartmentListQueryHandler>();
+builder.Services.AddScoped<CreatePositionCommandHandler>();
+builder.Services.AddScoped<UpdatePositionCommandHandler>();
+builder.Services.AddScoped<DeletePositionCommandHandler>();
+builder.Services.AddScoped<GetPositionByIdQueryHandler>();
+builder.Services.AddScoped<GetPositionsListQueryHandler>();
 
 var app = builder.Build();
 
