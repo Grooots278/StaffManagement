@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using StaffManagement.Application.Common;
 using StaffManagement.Application.Departments.Commands;
 using StaffManagement.Application.Departments.DTOs;
@@ -18,6 +19,7 @@ namespace StaffManagement.WebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Guid>> Create(CreateDepartmentCommand command, CancellationToken cancellationToken)
         {
+            await ValidateAsync(command, cancellationToken);
             var handler = _serviceProvider.GetRequiredService<CreateDepartmentCommandHandler>();
             var id = await handler.Handle(command, cancellationToken);
             return Ok(id);
@@ -63,6 +65,18 @@ namespace StaffManagement.WebAPI.Controllers
             var command = new GetDepartmentListQuery(searchTerm, pageNumber, pageSize);
             var result = await handler.Handle(command, cancellationToken);
             return Ok(result);
+        }
+
+        // Не очень чисто, но до подключения MediatR добавлена для тестов
+        private async Task ValidateAsync<T>(T command, CancellationToken cancellationToken)
+        {
+            var validator = _serviceProvider.GetService<IValidator<T>>();
+            if (validator != null)
+            {
+                var result = await validator.ValidateAsync(command, cancellationToken);
+                if (!result.IsValid)
+                    throw new ValidationException(result.Errors);
+            }
         }
     }
 }
