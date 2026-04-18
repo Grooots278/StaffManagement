@@ -7,12 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Positions\Commands\" />
-    <Folder Include="Positions\DTOs\" />
-    <Folder Include="Positions\Queries\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.6" />
   </ItemGroup>
 
