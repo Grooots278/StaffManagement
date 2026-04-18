@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StaffManagement.Application.Common;
+using StaffManagement.Application.Common.Exceptions;
 using StaffManagement.Application.Common.Interfaces;
 
 namespace StaffManagement.Application.Departments.Commands
@@ -19,7 +20,7 @@ namespace StaffManagement.Application.Departments.Commands
                 .FirstOrDefaultAsync(d => d.Id == command.Id, cancellationToken);
 
             if (department == null)
-                throw new Exception($"Department with Id {command.Id} not found.");
+                throw new NotFoundException($"Department with Id {command.Id} not found.");
 
             _context.Departments.Remove(department);
             await _context.SaveChangeAsync(cancellationToken);

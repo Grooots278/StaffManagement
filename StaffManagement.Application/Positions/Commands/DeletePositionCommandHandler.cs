@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StaffManagement.Application.Common;
+using StaffManagement.Application.Common.Exceptions;
 using StaffManagement.Application.Common.Interfaces;
 
 namespace StaffManagement.Application.Positions.Commands
@@ -19,7 +20,7 @@ namespace StaffManagement.Application.Positions.Commands
             var position = await _context.Positions.FirstOrDefaultAsync(i => i.Id == command.Id);
 
             if (position == null)
-                throw new Exception($"Position with id {command.Id} not found.");
+                throw new NotFoundException($"Position with id {command.Id} not found.");
 
             _context.Positions.Remove(position);
             await _context.SaveChangeAsync(cancellationToken);
