@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using StaffManagement.Application.Common.Interfaces;
 using StaffManagement.Application.Departments.Commands;
@@ -28,6 +29,8 @@ builder.Services.AddScoped<UpdatePositionCommandHandler>();
 builder.Services.AddScoped<DeletePositionCommandHandler>();
 builder.Services.AddScoped<GetPositionByIdQueryHandler>();
 builder.Services.AddScoped<GetPositionsListQueryHandler>();
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreateDepartmentCommandValidator>();
 
 var app = builder.Build();
 
