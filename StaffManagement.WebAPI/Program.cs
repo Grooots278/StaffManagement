@@ -6,6 +6,7 @@ using StaffManagement.Application.Departments.Queries;
 using StaffManagement.Application.Positions.Commands;
 using StaffManagement.Application.Positions.Queries;
 using StaffManagement.Infrastructure.Data;
+using StaffManagement.WebAPI.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
