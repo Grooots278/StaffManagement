@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using StaffManagement.Application.Common;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using StaffManagement.Application.Common.Interfaces;
 using StaffManagement.Application.Positions.DTOs;
 
@@ -8,7 +8,7 @@ namespace StaffManagement.Application.Positions.Queries
 
     public record GetPositionByIdQuery(Guid Id) : IRequest<PositionDto?>;
 
-    public class GetPositionByIdQueryHandler
+    public class GetPositionByIdQueryHandler : IRequestHandler<GetPositionByIdQuery, PositionDto?>
     {
 
         private readonly IApplicationDbContext _context;

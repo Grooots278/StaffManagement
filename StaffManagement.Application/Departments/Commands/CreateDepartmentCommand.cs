@@ -1,4 +1,4 @@
-﻿using StaffManagement.Application.Common;
+﻿using MediatR;
 
 namespace StaffManagement.Application.Departments.Commands
 {

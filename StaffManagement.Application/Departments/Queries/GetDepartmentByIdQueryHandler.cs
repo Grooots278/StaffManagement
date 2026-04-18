@@ -1,14 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using StaffManagement.Application.Common;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using StaffManagement.Application.Common.Interfaces;
 using StaffManagement.Application.Departments.DTOs;
-using StaffManagement.Domain.Entities;
 
 namespace StaffManagement.Application.Departments.Queries
 {
     public record GetDepartmentByIdQuery(Guid Id) : IRequest<DepartmentDto?>;
 
-    public class GetDepartmentByIdQueryHandler
+    public class GetDepartmentByIdQueryHandler : IRequestHandler<GetDepartmentByIdQuery, DepartmentDto?>
     {
         private readonly IApplicationDbContext _context;
 

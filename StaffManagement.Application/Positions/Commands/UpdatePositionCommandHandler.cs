@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using StaffManagement.Application.Common;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using StaffManagement.Application.Common.Exceptions;
 using StaffManagement.Application.Common.Interfaces;
 
@@ -9,7 +9,7 @@ namespace StaffManagement.Application.Positions.Commands
     public record UpdatePositionCommand(Guid Id, string Title, decimal? SalaryMin, decimal? SalaryMax) : IRequest<Unit>;
 
 
-    public class UpdatePositionCommandHandler
+    public class UpdatePositionCommandHandler : IRequestHandler<UpdatePositionCommand,  Unit>
     {
         private readonly IApplicationDbContext _context;
 

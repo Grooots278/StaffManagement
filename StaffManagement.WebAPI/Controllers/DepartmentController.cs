@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using StaffManagement.Application.Common;
 using StaffManagement.Application.Departments.Commands;
@@ -12,43 +12,38 @@ namespace StaffManagement.WebAPI.Controllers
     public class DepartmentController : ControllerBase
     {
 
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IMediator _mediator;
 
-        public DepartmentController(IServiceProvider serviceProvider) => _serviceProvider = serviceProvider;
+        public DepartmentController(IMediator mediator) => _mediator = mediator;
 
         [HttpPost]
         public async Task<ActionResult<Guid>> Create(CreateDepartmentCommand command, CancellationToken cancellationToken)
         {
-            await ValidateAsync(command, cancellationToken);
-            var handler = _serviceProvider.GetRequiredService<CreateDepartmentCommandHandler>();
-            var id = await handler.Handle(command, cancellationToken);
+            var id = await _mediator.Send(command, cancellationToken);
             return Ok(id);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, UpdateDepartmentDto dto, CancellationToken cancellationToken)
         {
-            var handler = _serviceProvider.GetRequiredService<UpdateDepartmentCommandHandler>();
             var command = new UpdateDepartmentCommand(id, dto.Name, dto.Description);
-            await handler.Handle(command, cancellationToken);
+            await _mediator.Send(command, cancellationToken);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
         {
-            var handler = _serviceProvider.GetRequiredService<DeleteDepartmentCommandHandler>();
             var command = new DeleteDepartmentCommand(id);
-            await handler.Handle(command, cancellationToken);
+            await _mediator.Send(command, cancellationToken);
             return NoContent();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<DepartmentDto>> GetById(Guid id, CancellationToken cancellationToken)
         {
-            var handler = _serviceProvider.GetRequiredService<GetDepartmentByIdQueryHandler>();
             var command = new GetDepartmentByIdQuery(id);
-            var result = await handler.Handle(command, cancellationToken);
+            var result = await _mediator.Send(command, cancellationToken);
             if (result == null) return NotFound();
             return Ok(result);
         }
@@ -61,22 +56,9 @@ namespace StaffManagement.WebAPI.Controllers
             CancellationToken cancellationToken = default
             )
         {
-            var handler = _serviceProvider.GetRequiredService<GetDepartmentListQueryHandler>();
             var command = new GetDepartmentListQuery(searchTerm, pageNumber, pageSize);
-            var result = await handler.Handle(command, cancellationToken);
+            var result = await _mediator.Send(command, cancellationToken);
             return Ok(result);
-        }
-
-        // Не очень чисто, но до подключения MediatR добавлена для тестов
-        private async Task ValidateAsync<T>(T command, CancellationToken cancellationToken)
-        {
-            var validator = _serviceProvider.GetService<IValidator<T>>();
-            if (validator != null)
-            {
-                var result = await validator.ValidateAsync(command, cancellationToken);
-                if (!result.IsValid)
-                    throw new ValidationException(result.Errors);
-            }
         }
     }
 }

@@ -1,13 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using StaffManagement.Application.Common;
 using StaffManagement.Application.Common.Interfaces;
 using StaffManagement.Domain.Entities;
-
+using MediatR;
 namespace StaffManagement.Application.Positions.Commands
 {
     public record CreatePositionCommand(string Title, decimal? SalaryMin, decimal? SalaryMax, Guid DepartmentId) : IRequest<Guid>;
 
-    public class CreatePositionCommandHandler
+    public class CreatePositionCommandHandler : IRequestHandler<CreatePositionCommand, Guid>
     {
         private readonly IApplicationDbContext _context;
 

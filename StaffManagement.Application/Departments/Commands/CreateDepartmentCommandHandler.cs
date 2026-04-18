@@ -1,9 +1,10 @@
-﻿using StaffManagement.Application.Common.Interfaces;
+﻿using MediatR;
+using StaffManagement.Application.Common.Interfaces;
 using StaffManagement.Domain.Entities;
 
 namespace StaffManagement.Application.Departments.Commands
 {
-    public class CreateDepartmentCommandHandler
+    public class CreateDepartmentCommandHandler : IRequestHandler<CreateDepartmentCommand, Guid>
     {
         private readonly IApplicationDbContext _context;
 

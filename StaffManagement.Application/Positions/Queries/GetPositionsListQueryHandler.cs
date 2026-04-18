@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using StaffManagement.Application.Common;
 using StaffManagement.Application.Common.Interfaces;
 using StaffManagement.Application.Positions.DTOs;
@@ -8,7 +9,7 @@ namespace StaffManagement.Application.Positions.Queries
     public record GetPositionsListQuery(Guid? DepartmentId,
         string? searchTerm, int PageNumber = 1, int PageSize = 10) : IRequest<PaginatedList<PositionDto>>;
 
-    public class GetPositionsListQueryHandler
+    public class GetPositionsListQueryHandler : IRequestHandler<GetPositionsListQuery, PaginatedList<PositionDto>>
     {
 
         private readonly IApplicationDbContext _context;

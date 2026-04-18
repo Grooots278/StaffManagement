@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using StaffManagement.Application.Common;
 using StaffManagement.Application.Positions.Commands;
 using StaffManagement.Application.Positions.DTOs;
@@ -11,42 +12,38 @@ namespace StaffManagement.WebAPI.Controllers
     public class PositionController : ControllerBase
     {
 
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IMediator _mediator;
 
-        public PositionController(IServiceProvider serviceProvider) => _serviceProvider = serviceProvider;
+        public PositionController(IMediator mediator) => _mediator = mediator;
 
         [HttpPost]
         public async Task<ActionResult<Guid>> Create(CreatePositionCommand command, CancellationToken cancellationToken)
         {
-            var handler = _serviceProvider.GetRequiredService<CreatePositionCommandHandler>();
-            var id = await handler.Handle(command, cancellationToken);
+            var id = await _mediator.Send(command, cancellationToken);
             return Ok(id);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, UpdatePositionDto dto, CancellationToken cancellationToken)
         {
-            var handler = _serviceProvider.GetRequiredService<UpdatePositionCommandHandler>();
             var command = new UpdatePositionCommand(id, dto.Title, dto.SalaryMin, dto.SalaryMax);
-            await handler.Handle(command, cancellationToken);
+            await _mediator.Send(command, cancellationToken);
             return NoContent(); 
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
         {
-            var handler = _serviceProvider.GetRequiredService<DeletePositionCommandHandler>();
             var command = new DeletePositionCommand(id);
-            await handler.Handle(command, cancellationToken);
+            await _mediator.Send(command, cancellationToken);
             return NoContent();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<PositionDto>> GetById(Guid id, CancellationToken cancellationToken)
         {
-            var handler = _serviceProvider.GetRequiredService<GetPositionByIdQueryHandler>();
             var query = new GetPositionByIdQuery(id);
-            var result = await handler.Handle(query, cancellationToken);
+            var result = await _mediator.Send(query, cancellationToken);
             return result == null ? NotFound() : Ok(result);
         }
 
@@ -59,9 +56,8 @@ namespace StaffManagement.WebAPI.Controllers
             CancellationToken cancellationToken = default
             )
         {
-            var handler = _serviceProvider.GetRequiredService<GetPositionsListQueryHandler>();
             var query = new GetPositionsListQuery(departmentId, searchTerm, pageNumber, pageSize);
-            var result = await handler.Handle(query, cancellationToken);
+            var result = await _mediator.Send(query, cancellationToken);
             return Ok(result);
         }
     }

@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using StaffManagement.Application.Common;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using StaffManagement.Application.Common.Exceptions;
 using StaffManagement.Application.Common.Interfaces;
 
@@ -8,7 +8,7 @@ namespace StaffManagement.Application.Positions.Commands
 
     public record DeletePositionCommand(Guid Id) : IRequest<Unit>;
 
-    public class DeletePositionCommandHandler
+    public class DeletePositionCommandHandler : IRequestHandler<DeletePositionCommand, Unit>
     {
 
         private readonly IApplicationDbContext _context;

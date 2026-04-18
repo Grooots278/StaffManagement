@@ -1,5 +1,7 @@
 using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using StaffManagement.Application.Common.Behavior;
 using StaffManagement.Application.Common.Interfaces;
 using StaffManagement.Application.Departments.Commands;
 using StaffManagement.Application.Departments.Queries;
@@ -20,16 +22,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IApplicationDbContext>(provider => 
 provider.GetRequiredService<AppDbContext>());
 
-builder.Services.AddScoped<CreateDepartmentCommandHandler>();
-builder.Services.AddScoped<UpdateDepartmentCommandHandler>();
-builder.Services.AddScoped<DeleteDepartmentCommandHandler>();
-builder.Services.AddScoped<GetDepartmentByIdQueryHandler>();
-builder.Services.AddScoped<GetDepartmentListQueryHandler>();
-builder.Services.AddScoped<CreatePositionCommandHandler>();
-builder.Services.AddScoped<UpdatePositionCommandHandler>();
-builder.Services.AddScoped<DeletePositionCommandHandler>();
-builder.Services.AddScoped<GetPositionByIdQueryHandler>();
-builder.Services.AddScoped<GetPositionsListQueryHandler>();
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateDepartmentCommand).Assembly));
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateDepartmentCommandValidator>();
 
