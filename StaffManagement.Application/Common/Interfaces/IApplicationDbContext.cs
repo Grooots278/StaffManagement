@@ -7,6 +7,7 @@ namespace StaffManagement.Application.Common.Interfaces
     {
         DbSet<Department> Departments { get; }
         DbSet<Position> Positions { get; }
+        DbSet<Employee> Employees { get; }
 
         Task<int> SaveChangeAsync(CancellationToken cancellationToken);
     }
