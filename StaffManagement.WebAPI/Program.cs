@@ -3,10 +3,8 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using StaffManagement.Application.Common.Behavior;
 using StaffManagement.Application.Common.Interfaces;
+using StaffManagement.Application.Common.Mappings;
 using StaffManagement.Application.Departments.Commands;
-using StaffManagement.Application.Departments.Queries;
-using StaffManagement.Application.Positions.Commands;
-using StaffManagement.Application.Positions.Queries;
 using StaffManagement.Infrastructure.Data;
 using StaffManagement.WebAPI.Middleware;
 
@@ -25,6 +23,8 @@ provider.GetRequiredService<AppDbContext>());
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateDepartmentCommand).Assembly));
+
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateDepartmentCommandValidator>();
 
