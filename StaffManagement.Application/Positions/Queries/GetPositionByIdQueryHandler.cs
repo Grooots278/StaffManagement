@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using StaffManagement.Application.Common.Interfaces;
 using StaffManagement.Application.Positions.DTOs;
@@ -12,8 +13,13 @@ namespace StaffManagement.Application.Positions.Queries
     {
 
         private readonly IApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public GetPositionByIdQueryHandler(IApplicationDbContext context) => _context = context;
+        public GetPositionByIdQueryHandler(IApplicationDbContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
 
         public async Task<PositionDto?> Handle(GetPositionByIdQuery query, CancellationToken cancellationToken)
         {
@@ -22,12 +28,7 @@ namespace StaffManagement.Application.Positions.Queries
                 .AsNoTracking()
                 .FirstOrDefaultAsync(i => i.Id == query.Id);
 
-            if (position == null) return null;
-
-            return new PositionDto
-            (
-                position.Id, position.Title, position.MinSalary, position.MaxSalary, position.DepartmentId, position.Department.Name
-            );
+            return position == null ? null : _mapper.Map<PositionDto>( position );  
         }
     }
 }

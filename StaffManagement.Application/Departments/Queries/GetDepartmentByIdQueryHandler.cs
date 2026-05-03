@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using StaffManagement.Application.Common.Interfaces;
 using StaffManagement.Application.Departments.DTOs;
@@ -10,8 +11,13 @@ namespace StaffManagement.Application.Departments.Queries
     public class GetDepartmentByIdQueryHandler : IRequestHandler<GetDepartmentByIdQuery, DepartmentDto?>
     {
         private readonly IApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public GetDepartmentByIdQueryHandler(IApplicationDbContext context) => _context = context;
+        public GetDepartmentByIdQueryHandler(IApplicationDbContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
 
         public async Task<DepartmentDto?> Handle(GetDepartmentByIdQuery query, CancellationToken cancellationToken)
         {
@@ -19,16 +25,7 @@ namespace StaffManagement.Application.Departments.Queries
                 .Include(d => d.Positions)
                 .FirstOrDefaultAsync(i => i.Id == query.Id);
 
-            if (department == null)
-                return null;
-
-            return new DepartmentDto(
-                department.Id,
-                department.Name,
-                department.Description,
-                department.CreatedAt,
-                department.UpdateAt,
-                department.Positions.Count);
+            return department == null ? null : _mapper.Map<DepartmentDto>(department);
         }
     }
 }

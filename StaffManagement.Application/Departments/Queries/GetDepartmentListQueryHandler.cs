@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using StaffManagement.Application.Common;
 using StaffManagement.Application.Common.Interfaces;
@@ -10,8 +11,13 @@ namespace StaffManagement.Application.Departments.Queries
     public class GetDepartmentListQueryHandler : IRequestHandler<GetDepartmentListQuery, PaginatedList<DepartmentDto>>
     {
         private readonly IApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public GetDepartmentListQueryHandler(IApplicationDbContext context) => _context = context;
+        public GetDepartmentListQueryHandler(IApplicationDbContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
 
         public async Task<PaginatedList<DepartmentDto>> Handle(GetDepartmentListQuery query, CancellationToken cancellationToken)
         {
@@ -29,17 +35,11 @@ namespace StaffManagement.Application.Departments.Queries
                 .OrderBy(d => d.Name)
                 .Skip((query.PageNumber - 1) * query.PageSize)
                 .Take(query.PageSize)
-                .Select(d => new DepartmentDto
-                (
-                    d.Id,
-                    d.Name,
-                    d.Description,
-                    d.CreatedAt,
-                    d.UpdateAt,
-                    d.Positions.Count
-                    )).ToListAsync(cancellationToken);
+                .ToListAsync(cancellationToken);
 
-            return new PaginatedList<DepartmentDto>(items, totalCount, query.PageNumber, query.PageSize);
+            var dtos = _mapper.Map<List<DepartmentDto>>(items);
+
+            return new PaginatedList<DepartmentDto>(dtos, totalCount, query.PageNumber, query.PageSize);
         }
     }
 }

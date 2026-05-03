@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using StaffManagement.Application.Common;
 using StaffManagement.Application.Common.Interfaces;
@@ -13,8 +14,13 @@ namespace StaffManagement.Application.Positions.Queries
     {
 
         private readonly IApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public GetPositionsListQueryHandler(IApplicationDbContext context) => _context = context;
+        public GetPositionsListQueryHandler(IApplicationDbContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
 
         public async Task<PaginatedList<PositionDto>> Handle(GetPositionsListQuery query, CancellationToken cancellationToken)
         {
@@ -34,11 +40,11 @@ namespace StaffManagement.Application.Positions.Queries
                 .OrderBy(p => p.Title)
                 .Skip((query.PageNumber - 1) * query.PageSize)
                 .Take(query.PageSize)
-                .Select(x => new PositionDto(
-                    x.Id, x.Title, x.MinSalary, x.MaxSalary, x.DepartmentId, x.Department.Name
-                    )).ToListAsync();
+                .ToListAsync(cancellationToken);
 
-            return new PaginatedList<PositionDto>(item, totalCount, query.PageNumber, query.PageSize);
+            var dtos = _mapper.Map<List<PositionDto>>(item);
+
+            return new PaginatedList<PositionDto>(dtos, totalCount, query.PageNumber, query.PageSize);
         }
     }
 }
