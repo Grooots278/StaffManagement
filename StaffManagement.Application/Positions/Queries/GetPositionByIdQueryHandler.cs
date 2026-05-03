@@ -26,7 +26,7 @@ namespace StaffManagement.Application.Positions.Queries
             var position = await _context.Positions
                 .Include(d => d.Department)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(i => i.Id == query.Id);
+                .FirstOrDefaultAsync(i => i.Id == query.Id, cancellationToken);
 
             return position == null ? null : _mapper.Map<PositionDto>( position );  
         }

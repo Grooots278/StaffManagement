@@ -17,7 +17,7 @@ namespace StaffManagement.Application.Positions.Commands
 
         public async Task<Unit> Handle(UpdatePositionCommand command, CancellationToken cancellationToken)
         {
-            var position = await _context.Positions.FirstOrDefaultAsync(i => i.Id == command.Id);
+            var position = await _context.Positions.FirstOrDefaultAsync(i => i.Id == command.Id, cancellationToken);
 
             if (position == null)
                 throw new NotFoundException($"Position with id {command.Id} not found.");

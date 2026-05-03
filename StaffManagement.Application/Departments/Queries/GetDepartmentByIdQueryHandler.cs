@@ -23,7 +23,7 @@ namespace StaffManagement.Application.Departments.Queries
         {
             var department = await _context.Departments
                 .Include(d => d.Positions)
-                .FirstOrDefaultAsync(i => i.Id == query.Id);
+                .FirstOrDefaultAsync(i => i.Id == query.Id, cancellationToken);
 
             return department == null ? null : _mapper.Map<DepartmentDto>(department);
         }
