@@ -16,8 +16,8 @@
 
 ## 🧱 Архитектура и стек
 
-- **ASP.NET Core 8** – Web API
-- **Entity Framework Core 8** – ORM
+- **ASP.NET Core 10** – Web API
+- **Entity Framework Core 10** – ORM
 - **PostgreSQL 16** – база данных
 - **Docker / Docker Compose** – контейнеризация
 - **MediatR** – реализация паттерна CQRS
@@ -27,9 +27,9 @@
 - **Swagger / OpenAPI** – документирование и тестирование API
 
 ## 📁 Структура решения
-StaffManagement.sln
-├── StaffManagement.Domain – сущности, справочники
-├── StaffManagement.Application – CQRS команды/запросы, DTO, интерфейсы
-├── StaffManagement.Infrastructure – DbContext, миграции, реализация интерфейсов
-├── StaffManagement.WebAPI – точка входа, контроллеры, middleware
-└── StaffManagement.Tests – модульные и интеграционные тесты (не полностью реализованы)
+**StaffManagement.sln**
+**├── StaffManagement.Domain – сущности, справочники**
+**├── StaffManagement.Application – CQRS команды/запросы, DTO, интерфейсы**
+**├── StaffManagement.Infrastructure – DbContext, миграции, реализация интерфейсов**
+**├── StaffManagement.WebAPI – точка входа, контроллеры, middleware**
+**└── StaffManagement.Tests – модульные и интеграционные тесты (не полностью реализованы)**
